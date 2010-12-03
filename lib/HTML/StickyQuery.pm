@@ -16,7 +16,7 @@ sub new {
 	abs => 0,
 	regexp => undef,
     }, $class;
-    foreach my $key(qw(keep_original abs regexp)) {
+    foreach my $key(qw(keep_original abs regexp href_regexp)) {
 	$self->{$key} = $args{$key} if exists $args{$key};
     }
     # backward compat
@@ -78,6 +78,10 @@ sub start {
     }
     else {
 	unless(exists $attr->{href}) {
+	    $self->{output} .= $orig;
+	    return;
+	}
+	if (defined $self->{href_regexp} and $attr->{href} !~ qr{$self->{href_regexp}}) {
 	    $self->{output} .= $orig;
 	    return;
 	}
